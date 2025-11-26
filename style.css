@@ -236,6 +236,16 @@ a:hover {
   display: flex;
   justify-content: flex-end;
 }
+.rating-actions .rating-save {
+  font-size: 0.75rem;
+}
+
+/* API tester button inside cards */
+.api-tester-btn {
+  margin-top: 4px;
+  font-size: 0.75rem;
+  padding: 4px 6px;
+}
 
 /* Footer */
 footer {
@@ -253,4 +263,38 @@ footer {
   .http-row {
     flex-direction: column;
   }
+}
+
+
+/* HTTP history */
+.http-history {
+  border-radius: 10px;
+  border: 1px solid #333;
+  background: #111119;
+  padding: 10px;
+  margin-bottom: 16px;
+}
+.light .http-history {
+  background: #ffffff;
+}
+.http-history h3 {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+}
+#httpHistoryList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.history-item-btn {
+  font-size: 0.75rem;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: var(--box);
+  color: var(--fg);
+  cursor: pointer;
+}
+.history-item-btn:hover {
+  background: var(--accent-soft);
 }

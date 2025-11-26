@@ -1,5 +1,5 @@
 "use strict";
-const CACHE = "ai-dev-hub-v3";
+const CACHE = "ai-dev-hub-v5";
 const FILES = [
   "./",
   "./index.html",

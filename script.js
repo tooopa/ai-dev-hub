@@ -72,26 +72,26 @@ const categoryConfig = {
 // Dane narzędzi (pełny JSON z kategoriami)
 const tools = [
   // API (20)
-  { id: "openai_api", name: "OpenAI API", url: "https://platform.openai.com/docs/api-reference", category: "API" },
-  { id: "anthropic_api", name: "Anthropic API", url: "https://docs.anthropic.com", category: "API" },
-  { id: "google_gemini_api", name: "Google Gemini API", url: "https://ai.google.dev/gemini-api", category: "API" },
-  { id: "x_grok_api", name: "X.ai Grok API", url: "https://x.ai", category: "API" },
-  { id: "hf_inference_api", name: "HuggingFace Inference API", url: "https://huggingface.co/inference-api", category: "API" },
-  { id: "replicate_api", name: "Replicate API", url: "https://replicate.com/docs/reference/http", category: "API" },
-  { id: "groq_api", name: "Groq API", url: "https://console.groq.com/docs", category: "API" },
-  { id: "cohere_api", name: "Cohere API", url: "https://docs.cohere.com", category: "API" },
-  { id: "stability_api", name: "Stability AI API", url: "https://platform.stability.ai", category: "API" },
-  { id: "elevenlabs_api", name: "ElevenLabs API", url: "https://elevenlabs.io/docs/api-reference", category: "API" },
-  { id: "deepgram_api", name: "Deepgram API", url: "https://developers.deepgram.com", category: "API" },
-  { id: "assemblyai_api", name: "AssemblyAI API", url: "https://www.assemblyai.com/docs", category: "API" },
-  { id: "tavily_api", name: "Tavily Search API", url: "https://docs.tavily.com", category: "API" },
-  { id: "pinecone_api", name: "Pinecone API", url: "https://docs.pinecone.io/reference", category: "API" },
-  { id: "weaviate_api", name: "Weaviate API", url: "https://weaviate.io/developers/weaviate", category: "API" },
-  { id: "qdrant_api", name: "Qdrant API", url: "https://qdrant.tech/documentation", category: "API" },
-  { id: "milvus_api", name: "Milvus REST API", url: "https://milvus.io/docs", category: "API" },
-  { id: "modal_api", name: "Modal API", url: "https://modal.com/docs/guide", category: "API" },
-  { id: "runpod_api", name: "RunPod API", url: "https://docs.runpod.io", category: "API" },
-  { id: "nvidia_nim_api", name: "NVIDIA NIM API", url: "https://build.nvidia.com/nim", category: "API" },
+  { id: "openai_api", name: "OpenAI API", url: "https://api.openai.com/v1/chat/completions", category: "API" },
+  { id: "anthropic_api", name: "Anthropic API", url: "https://api.anthropic.com/v1/messages", category: "API" },
+  { id: "google_gemini_api", name: "Google Gemini API", url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent", category: "API" },
+  { id: "x_grok_api", name: "X.ai Grok API", url: "https://api.x.ai/v1", category: "API" },
+  { id: "hf_inference_api", name: "HuggingFace Inference API", url: "https://api-inference.huggingface.co/models/bert-base-uncased", category: "API" },
+  { id: "replicate_api", name: "Replicate API", url: "https://api.replicate.com/v1/predictions", category: "API" },
+  { id: "groq_api", name: "Groq API", url: "https://api.groq.com/openai/v1/chat/completions", category: "API" },
+  { id: "cohere_api", name: "Cohere API", url: "https://api.cohere.ai/v1/chat", category: "API" },
+  { id: "stability_api", name: "Stability AI API", url: "https://api.stability.ai/v2beta/stable-image/generate/core", category: "API" },
+  { id: "elevenlabs_api", name: "ElevenLabs API", url: "https://api.elevenlabs.io/v1/text-to-speech", category: "API" },
+  { id: "deepgram_api", name: "Deepgram API", url: "https://api.deepgram.com/v1/listen", category: "API" },
+  { id: "assemblyai_api", name: "AssemblyAI API", url: "https://api.assemblyai.com/v2/transcript", category: "API" },
+  { id: "tavily_api", name: "Tavily Search API", url: "https://api.tavily.com/search", category: "API" },
+  { id: "pinecone_api", name: "Pinecone API", url: "https://controller.us-east1-gcp.pinecone.io/actions/whoami", category: "API" },
+  { id: "weaviate_api", name: "Weaviate API", url: "https://localhost:8080/v1/schema", category: "API" },
+  { id: "qdrant_api", name: "Qdrant API", url: "http://localhost:6333/collections", category: "API" },
+  { id: "milvus_api", name: "Milvus REST API", url: "http://localhost:19530", category: "API" },
+  { id: "modal_api", name: "Modal API", url: "https://api.modal.com/v1", category: "API" },
+  { id: "runpod_api", name: "RunPod API", url: "https://api.runpod.io/graphql", category: "API" },
+  { id: "nvidia_nim_api", name: "NVIDIA NIM API", url: "https://integrate.api.nvidia.com/v1/chat/completions", category: "API" },
 
   // Console (20)
   { id: "openai_console", name: "OpenAI Platform Console", url: "https://platform.openai.com", category: "Console" },
@@ -206,6 +206,12 @@ const tools = [
 
 // Local ratings storage
 let ratings = {};
+let httpHistory = [];
+try {
+  httpHistory = JSON.parse(localStorage.getItem("aiDevHubHttpHistory") || "[]");
+} catch {
+  httpHistory = [];
+}
 try {
   ratings = JSON.parse(localStorage.getItem("aiDevHubRatings") || "{}");
 } catch {
@@ -270,6 +276,7 @@ importFile.addEventListener("change", () => {
 });
 
 // HTTP tester
+const httpPreset = document.getElementById("httpPreset");
 const httpMethod = document.getElementById("httpMethod");
 const httpUrl = document.getElementById("httpUrl");
 const httpHeaders = document.getElementById("httpHeaders");
@@ -277,6 +284,74 @@ const httpBody = document.getElementById("httpBody");
 const httpSend = document.getElementById("httpSend");
 const httpStatus = document.getElementById("httpStatus");
 const httpResponseText = document.getElementById("httpResponseText");
+const httpHistoryList = document.getElementById("httpHistoryList");
+const httpTesterSection = document.querySelector(".http-tester");
+
+httpPreset.addEventListener("change", () => {
+  const v = httpPreset.value;
+  if (!v) {
+    httpMethod.value = "GET";
+    httpUrl.value = "";
+    httpHeaders.value = "";
+    httpBody.value = "";
+    return;
+  }
+  if (v === "openai_chat") {
+    httpMethod.value = "POST";
+    httpUrl.value = "https://api.openai.com/v1/chat/completions";
+    httpHeaders.value = JSON.stringify({
+      "Authorization": "Bearer sk-...TU_WSTAW_SWÓJ_KLUCZ...",
+      "Content-Type": "application/json"
+    }, null, 2);
+    httpBody.value = JSON.stringify({
+      "model": "gpt-4.1-mini",
+      "messages": [
+        {"role": "user", "content": "Hello from AI Developer Hub"}
+      ]
+    }, null, 2);
+  } else if (v === "anthropic_messages") {
+    httpMethod.value = "POST";
+    httpUrl.value = "https://api.anthropic.com/v1/messages";
+    httpHeaders.value = JSON.stringify({
+      "x-api-key": "sk-ant-...TU_WSTAW_SWÓJ_KLUCZ...",
+      "anthropic-version": "2023-06-01",
+      "Content-Type": "application/json"
+    }, null, 2);
+    httpBody.value = JSON.stringify({
+      "model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 64,
+      "messages": [
+        {"role": "user", "content": "Hello from AI Developer Hub"}
+      ]
+    }, null, 2);
+  } else if (v === "gemini_generate") {
+    httpMethod.value = "POST";
+    httpUrl.value = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=API_KEY_TUTAJ";
+    httpHeaders.value = JSON.stringify({
+      "Content-Type": "application/json"
+    }, null, 2);
+    httpBody.value = JSON.stringify({
+      "contents": [
+        {
+          "parts": [
+            {"text": "Hello from AI Developer Hub"}
+          ]
+        }
+      ]
+    }, null, 2);
+  } else if (v === "hf_inference") {
+    httpMethod.value = "POST";
+    httpUrl.value = "https://api-inference.huggingface.co/models/gpt2";
+    httpHeaders.value = JSON.stringify({
+      "Authorization": "Bearer hf_...TWÓJ_TOKEN...",
+      "Content-Type": "application/json"
+    }, null, 2);
+    httpBody.value = JSON.stringify({
+      "inputs": "Hello from AI Developer Hub",
+      "parameters": {"max_new_tokens": 32}
+    }, null, 2);
+  }
+});
 
 httpSend.addEventListener("click", async () => {
   const url = httpUrl.value.trim();
@@ -311,6 +386,22 @@ httpSend.addEventListener("click", async () => {
     httpStatus.textContent = `Status: ${resp.status} ${resp.statusText}`;
     const text = await resp.text();
     httpResponseText.textContent = text;
+
+    // Zapis do historii
+    try {
+      httpHistory.unshift({
+        method: httpMethod.value,
+        url,
+        headersText: httpHeaders.value,
+        bodyText: httpBody.value,
+        ts: Date.now()
+      });
+      httpHistory = httpHistory.slice(0, 10);
+      localStorage.setItem("aiDevHubHttpHistory", JSON.stringify(httpHistory));
+      renderHttpHistory();
+    } catch (e) {
+      console.warn("Nie udało się zapisać historii:", e);
+    }
   } catch (err) {
     httpStatus.textContent = "Błąd żądania";
     httpResponseText.textContent = String(err);
@@ -409,11 +500,32 @@ function render() {
         </div>
       `;
 
-      grid.appendChild(card);
       card.appendChild(title);
       card.appendChild(url);
       card.appendChild(meta);
       card.appendChild(ratingBox);
+
+      // API → przycisk auto-uzupełniania testera
+      if (category === "API") {
+        const apiBtn = document.createElement("button");
+        apiBtn.type = "button";
+        apiBtn.className = "api-tester-btn";
+        apiBtn.textContent = "Do testera API";
+        apiBtn.addEventListener("click", () => {
+          httpPreset.value = "";
+          httpMethod.value = "GET";
+          httpUrl.value = tool.url;
+          httpHeaders.value = "";
+          httpBody.value = "";
+          if (httpTesterSection) {
+            const top = httpTesterSection.getBoundingClientRect().top + window.scrollY - 8;
+            window.scrollTo({ top, behavior: "smooth" });
+          }
+        });
+        card.appendChild(apiBtn);
+      }
+
+      grid.appendChild(card);
     });
 
     body.appendChild(grid);
@@ -457,6 +569,38 @@ function applyRatingHandlers() {
     });
   });
 }
+
+
+function renderHttpHistory() {
+  if (!httpHistoryList) return;
+  httpHistoryList.innerHTML = "";
+  if (!httpHistory || httpHistory.length === 0) {
+    const span = document.createElement("span");
+    span.style.fontSize = "0.75rem";
+    span.style.opacity = "0.8";
+    span.textContent = "Brak zapisanej historii.";
+    httpHistoryList.appendChild(span);
+    return;
+  }
+  httpHistory.forEach((item) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "history-item-btn";
+    const urlShort = item.url && item.url.length > 60 ? item.url.slice(0, 57) + "..." : (item.url || "");
+    btn.textContent = `${item.method || "GET"} · ${urlShort}`;
+    btn.addEventListener("click", () => {
+      httpMethod.value = item.method || "GET";
+      httpUrl.value = item.url || "";
+      httpHeaders.value = item.headersText || "";
+      httpBody.value = item.bodyText || "";
+      const top = httpTesterSection.getBoundingClientRect().top + window.scrollY - 8;
+      window.scrollTo({ top, behavior: "smooth" });
+    });
+    httpHistoryList.appendChild(btn);
+  });
+}
+
+renderHttpHistory();
 
 // Search & filter events
 searchInput.addEventListener("input", render);

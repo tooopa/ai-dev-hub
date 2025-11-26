@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>AI Developer Hub 3.0</title>
+  <title>AI Developer Hub 5.0</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
 <body>
   <header>
     <div class="title-block">
-      <h1>AI Developer Hub 3.0</h1>
+      <h1>AI Developer Hub 5.0</h1>
       <p class="subtitle">Startowa mapa narzędzi AI: API · Konsole · Chaty · IDE · CLI · Tools</p>
     </div>
     <div class="header-controls">
@@ -39,6 +39,15 @@
   <section class="http-tester">
     <h2>HTTP tester (API)</h2>
     <div class="http-row">
+      <select id="httpPreset">
+        <option value="">Preset: ręcznie</option>
+        <option value="openai_chat">OpenAI · chat completions</option>
+        <option value="anthropic_messages">Anthropic · messages</option>
+        <option value="gemini_generate">Google Gemini · generateContent</option>
+        <option value="hf_inference">HuggingFace · inference</option>
+      </select>
+    </div>
+    <div class="http-row">
       <select id="httpMethod">
         <option value="GET">GET</option>
         <option value="POST">POST</option>
@@ -47,7 +56,7 @@
       <button id="httpSend">Wyślij</button>
     </div>
     <div class="http-row">
-      <textarea id="httpHeaders" rows="3" placeholder='Nagłówki JSON, np. {"Authorization": "Bearer ..."}'></textarea>
+      <textarea id="httpHeaders" rows="3" placeholder='Nagłówki JSON, np. {"Authorization": "Bearer sk-...", "Content-Type": "application/json"}'></textarea>
     </div>
     <div class="http-row">
       <textarea id="httpBody" rows="4" placeholder='Body JSON dla POST (opcjonalne)'></textarea>
@@ -58,10 +67,15 @@
     </div>
   </section>
 
+  <section class="http-history">
+    <h3>Historia zapytań (lokalnie)</h3>
+    <div id="httpHistoryList"></div>
+  </section>
+
   <main id="categoriesContainer"></main>
 
   <footer>
-    <small>AI Dev Hub 3.0 · lokalne oceny i notatki zapisywane są tylko w tej przeglądarce (localStorage). Eksport/Import JSON umożliwia przeniesienie ocen.</small>
+    <small>AI Dev Hub 4.0 · lokalne oceny i notatki zapisywane są tylko w tej przeglądarce (localStorage). Eksport/Import JSON umożliwia przeniesienie ocen.</small>
   </footer>
 
   <script src="script.js"></script>
