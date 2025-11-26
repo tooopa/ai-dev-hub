@@ -1,7 +1,7 @@
 {
-  "name": "AI Developer Hub",
+  "name": "AI Developer Hub 3.0",
   "short_name": "AI Dev Hub",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#0e0e15",
   "theme_color": "#0e0e15",

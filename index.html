@@ -1,33 +1,69 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<title>AI Developer Hub</title>
-<link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0e0e15">
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
-}
-</script>
+  <meta charset="UTF-8">
+  <title>AI Developer Hub 3.0</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0e0e15">
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker.register("sw.js");
+      });
+    }
+  </script>
 </head>
 <body>
-<header>
-  <h1>AI Developer Hub</h1>
-  <button id="themeToggle">🌙/☀️</button>
-</header>
-<section>
-  <input type="text" id="search" placeholder="Szukaj API, konsol, narzędzi…">
-</section>
-<h2>Platformy AI</h2>
-<div id="services" class="grid"></div>
-<h2>Dodaj własny serwis</h2>
-<div class="add-box">
-  <input id="newName" placeholder="Nazwa">
-  <input id="newURL" placeholder="URL (https://...)">
-  <button id="addBtn">Dodaj</button>
-</div>
-<script src="script.js"></script>
+  <header>
+    <div class="title-block">
+      <h1>AI Developer Hub 3.0</h1>
+      <p class="subtitle">Startowa mapa narzędzi AI: API · Konsole · Chaty · IDE · CLI · Tools</p>
+    </div>
+    <div class="header-controls">
+      <button id="themeToggle" title="Przełącz motyw">🌙/☀️</button>
+      <button id="exportRatings" title="Eksport ocen do JSON">⬇️ Oceny</button>
+      <button id="importRatingsBtn" title="Import ocen z JSON">⬆️ Oceny</button>
+      <input type="file" id="importRatingsFile" accept="application/json" style="display:none">
+    </div>
+  </header>
+
+  <section class="controls">
+    <input type="text" id="search" placeholder="Szukaj nazw, URL-i, opisów…">
+    <select id="categoryFilter">
+      <option value="all">Wszystkie kategorie</option>
+    </select>
+  </section>
+
+  <section class="http-tester">
+    <h2>HTTP tester (API)</h2>
+    <div class="http-row">
+      <select id="httpMethod">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+      </select>
+      <input type="text" id="httpUrl" placeholder="https://...">
+      <button id="httpSend">Wyślij</button>
+    </div>
+    <div class="http-row">
+      <textarea id="httpHeaders" rows="3" placeholder='Nagłówki JSON, np. {"Authorization": "Bearer ..."}'></textarea>
+    </div>
+    <div class="http-row">
+      <textarea id="httpBody" rows="4" placeholder='Body JSON dla POST (opcjonalne)'></textarea>
+    </div>
+    <div class="http-response">
+      <div id="httpStatus"></div>
+      <pre id="httpResponseText"></pre>
+    </div>
+  </section>
+
+  <main id="categoriesContainer"></main>
+
+  <footer>
+    <small>AI Dev Hub 3.0 · lokalne oceny i notatki zapisywane są tylko w tej przeglądarce (localStorage). Eksport/Import JSON umożliwia przeniesienie ocen.</small>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
